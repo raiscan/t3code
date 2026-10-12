@@ -616,6 +616,19 @@ describe("ClientSettings environment identification", () => {
 });
 
 describe("ClientSettings sidebar", () => {
+  it("keeps compact pinned rows opt-in and preserves the choice in stored settings and patches", () => {
+    expect(decodeClientSettings({}).sidebarCompactPinnedRows).toBe(false);
+    for (const enabled of [true, false]) {
+      expect(
+        decodeClientSettings({ sidebarCompactPinnedRows: enabled }).sidebarCompactPinnedRows,
+      ).toBe(enabled);
+      expect(decodeClientSettingsPatch({ sidebarCompactPinnedRows: enabled })).toEqual({
+        sidebarCompactPinnedRows: enabled,
+      });
+    }
+    expect(() => decodeClientSettingsPatch({ sidebarCompactPinnedRows: "yes" })).toThrow();
+  });
+
   it("defaults to the current sidebar", () => {
     expect(decodeClientSettings({}).legacySidebarEnabled).toBe(false);
   });

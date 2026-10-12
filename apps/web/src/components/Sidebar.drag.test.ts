@@ -32,12 +32,14 @@ function layout(
   over: string,
   scale = 1,
   cardHeight = 82,
+  pinnedHeight = cardHeight,
 ) {
   let top = 100;
   const rects = items.map((item) => {
     const height =
       item.kind === "thread"
-        ? (item.section === "pinned" || item.section === "active" ? cardHeight : 36) * scale
+        ? (item.section === "pinned" ? pinnedHeight : item.section === "active" ? cardHeight : 36) *
+          scale
         : item.marker === "pinned-header" || item.marker === "pinned-divider"
           ? 0
           : (item.marker.endsWith("placeholder") ? 0 : 32) * scale;
@@ -329,6 +331,21 @@ describe("sidebar drag projection", () => {
     settledHeader,
     thread("s1", "settled"),
   ];
+
+  it.each([1, 1.25])(
+    "opens a full active card when unpinning a compact row at scale %s",
+    (scale) => {
+      const strategy = createSidebarSortingStrategy({
+        items: pinned,
+        compactPinnedRows: true,
+        settledOrder: ["s1"],
+        settledExpanded: true,
+      });
+      const args = layout(pinned, "p1", "a1", scale, 82, 36);
+      expect(strategy({ ...args, index: 4 })?.y).toBe(-(36 * scale + 1));
+      expect(strategy({ ...args, index: 5 })?.y).toBe(46 * scale);
+    },
+  );
 
   it.each([
     ["p1", "p2"],

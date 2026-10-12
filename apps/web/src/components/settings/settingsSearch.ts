@@ -362,6 +362,12 @@ export const SETTINGS_SEARCH_ITEMS = [
     searchTerms: ["hide fold running monitoring threads inbox sidebar shelf"],
   },
   {
+    id: "compact-pinned-rows",
+    title: "Compact pinned rows",
+    to: "/settings/general",
+    searchTerms: ["sidebar pin density slim squash"],
+  },
+  {
     id: "auto-settle-inactive-threads",
     title: "Auto-settle inactive threads",
     to: "/settings/general",

@@ -110,6 +110,7 @@ export function createSidebarSortingStrategy(input: {
   snoozedThreadCount?: number;
   cardHeight?: number;
   slimHeight?: number;
+  compactPinnedRows?: boolean;
   /** Space each pinned boundary opens for its label while dragging. The
    * markers stay zero height at rest, so nothing is reserved until pickup. */
   boundaryLabelHeight?: number;
@@ -144,7 +145,11 @@ export function createSidebarSortingStrategy(input: {
         }
         continue;
       }
-      if (item.section === "pinned" || item.section === "active" || item.section === "working")
+      if (
+        item.section === "active" ||
+        item.section === "working" ||
+        (item.section === "pinned" && !input.compactPinnedRows)
+      )
         cardHeight ??= rects[index]?.height;
       else slimHeight ??= rects[index]?.height;
       if (item.key !== active.key) groups[item.section].push(item);
@@ -208,7 +213,9 @@ export function createSidebarSortingStrategy(input: {
       const rect = index === undefined ? undefined : rects[index];
       const fallback =
         item.kind === "thread" &&
-        (item.section === "pinned" || item.section === "active" || item.section === "working")
+        (item.section === "active" ||
+          item.section === "working" ||
+          (item.section === "pinned" && !input.compactPinnedRows))
           ? cardHeight
           : slimHeight;
       const moved = item.kind === "thread" && item.key === active.key;

@@ -578,6 +578,9 @@ export function useSettingsRestore(onRestored?: () => void) {
       DEFAULT_UNIFIED_SETTINGS.sidebarWorkingShelfEnabled
         ? ["Working section"]
         : []),
+      ...(settings.sidebarCompactPinnedRows !== DEFAULT_UNIFIED_SETTINGS.sidebarCompactPinnedRows
+        ? ["Compact pinned rows"]
+        : []),
       ...(settings.sidebarAutoSettleAfterDays !==
       DEFAULT_UNIFIED_SETTINGS.sidebarAutoSettleAfterDays
         ? ["Auto-settle inactive threads"]
@@ -714,6 +717,7 @@ export function useSettingsRestore(onRestored?: () => void) {
       settings.sidebarProjectGroupingMode,
       settings.sidebarProjectSortOrder,
       settings.sidebarWorkingShelfEnabled,
+      settings.sidebarCompactPinnedRows,
       settings.sidebarThreadPreviewCount,
       settings.showSkillsInSlashMenu,
       settings.timestampFormat,
@@ -814,6 +818,7 @@ export function useSettingsRestore(onRestored?: () => void) {
       sidebarProjectGroupingMode: DEFAULT_UNIFIED_SETTINGS.sidebarProjectGroupingMode,
       sidebarProjectSortOrder: DEFAULT_UNIFIED_SETTINGS.sidebarProjectSortOrder,
       sidebarWorkingShelfEnabled: DEFAULT_UNIFIED_SETTINGS.sidebarWorkingShelfEnabled,
+      sidebarCompactPinnedRows: DEFAULT_UNIFIED_SETTINGS.sidebarCompactPinnedRows,
       sidebarAutoSettleAfterDays: DEFAULT_UNIFIED_SETTINGS.sidebarAutoSettleAfterDays,
       sidebarAutoSettleOnMerge: DEFAULT_UNIFIED_SETTINGS.sidebarAutoSettleOnMerge,
       autoResumeLimitedThreads: DEFAULT_UNIFIED_SETTINGS.autoResumeLimitedThreads,
@@ -2400,6 +2405,33 @@ export function GeneralSettingsPanel() {
                 updateSettings({ sidebarWorkingShelfEnabled: Boolean(checked) })
               }
               aria-label="Working section (beta)"
+            />
+          }
+        />
+
+        <SettingsRow
+          {...searchableSetting("compact-pinned-rows")}
+          description="Show pinned threads as short rows with their normal colors and status."
+          resetAction={
+            settings.sidebarCompactPinnedRows !==
+            DEFAULT_UNIFIED_SETTINGS.sidebarCompactPinnedRows ? (
+              <SettingResetButton
+                label="compact pinned rows"
+                onClick={() =>
+                  updateSettings({
+                    sidebarCompactPinnedRows: DEFAULT_UNIFIED_SETTINGS.sidebarCompactPinnedRows,
+                  })
+                }
+              />
+            ) : null
+          }
+          control={
+            <Switch
+              checked={settings.sidebarCompactPinnedRows}
+              onCheckedChange={(checked) =>
+                updateSettings({ sidebarCompactPinnedRows: Boolean(checked) })
+              }
+              aria-label="Compact pinned rows"
             />
           }
         />
